@@ -4,6 +4,9 @@ Start-Process powershell.exe -ArgumentList "-command `"Set-ExecutionPolicy Bypas
 
 # Definition des chemins
 [string]$curentPath = Get-Location
+[string]$chromedriverDriverPathZip = $curentPath + "\chromedriver.zip"
+[string]$chromedriverDriverPathFile = $curentPath + "\chromedriver"
+[string]$chromedriver = $curentPath + "\chromedriver\chromedriver.exe"
 [string]$chromeDriverPath = $curentPath + "\chromedriver.exe"
 [string]$firefoxDriverPathZip = $curentPath + "\firefoxdriver.zip"
 [string]$firefoxDriverPathFile = $curentPath + "\firefoxdriver"
@@ -12,7 +15,7 @@ Start-Process powershell.exe -ArgumentList "-command `"Set-ExecutionPolicy Bypas
 
 
 Write-Output "Telechargement du driver de Google Chrome"
-(new-object System.Net.WebClient).DownloadFile('https://chromedriver.storage.googleapis.com/index.html?path=81.0.4044.138/', $chromeDriverPath)
+(new-object System.Net.WebClient).DownloadFile('https://chromedriver.storage.googleapis.com/81.0.4044.138/chromedriver_win32.zip', $chromedriverDriverPathZip)
 Write-Output "Telechargement du driver de FireFox"
 (new-object System.Net.WebClient).DownloadFile('https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-win64.zip/', $firefoxDriverPathZip)
 
@@ -21,6 +24,11 @@ Expand-Archive -LiteralPath $firefoxDriverPathZip -DestinationPath $firefoxDrive
 Copy-Item -Path $geckodriver -Destination .\
 Remove-Item -Path $firefoxDriverPathFile -Recurse
 Remove-Item -Path $firefoxDriverPathZip
+
+Expand-Archive -LiteralPath $chromedriverDriverPathZip -DestinationPath $chromedriverDriverPathFile
+Copy-Item -Path $chromedriver -Destination .\
+Remove-Item -Path $chromedriverDriverPathFile -Recurse
+Remove-Item -Path $chromedriverDriverPathZip
 
 Write-Output "upgrade de pip et instalation des modules python"
 python -m pip install --upgrade pip
