@@ -198,6 +198,7 @@ for field in urlDatabase.split('\n'):
                            "//button[contains(text(),'Cookies')]",
                            "//button[contains(text(),'oui')]",
                            "//button[contains(text(),'Oui')]",
+                           "// button[contains(text(), 'Valider')]",
                            "//a[contains(text(),'accepter')]",
                            "//a[contains(text(),'Accepter')]",
                            "//a[contains(text(),'accepte')]",
