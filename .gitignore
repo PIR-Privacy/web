@@ -2,3 +2,5 @@
 chromedriver.exe
 geckodriver.exe
 scripttest.py
+result/*
+debug.log
