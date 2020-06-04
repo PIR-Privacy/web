@@ -6,6 +6,8 @@ import sqlite3
 import os
 import time
 
+from urlChecker import urlChecker
+
 import requests
 
 # Current directory
@@ -107,6 +109,12 @@ for field in urlDatabase.split('\n'):
                 continue
 
             print("Work in progress :" + currentUrl)
+            if not urlChecker(currentUrl):
+                notWorkingLog = open("result/urlNotWorking.log", "a")
+                notWorkingLog.write(currentUrl + "\n")
+                notWorkingLog.close()
+                continue
+
             time.sleep(5)
             if os.path.exists("C:\selenium\Default\Cookies"):
                 try:
@@ -220,7 +228,7 @@ for field in urlDatabase.split('\n'):
             if isClicked:
                 requests.get(f"https://smsapi.free-mobile.fr/sendmsg?user=95459826&pass=UbyUIMamz56vLp&msg=\"Error "
                              f"no click accepte {currentUrl} \"")
-                log = open("error.log", "a")
+                log = open("result/error.log", "a")
                 log.write(currentUrl + "\n")
                 log.close()
 
