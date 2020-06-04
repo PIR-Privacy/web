@@ -99,7 +99,6 @@ for field in urlDatabase.split('\n'):
         currentUrl = url[0]
 
         if currentUrl not in previousUrl:
-            resultLine = open("result/result.csv", "a")
 
             if (os.path.exists(f"result/{resultFileName(currentUrl)}_noAccept.csv")
                     and os.path.exists(f"result/{resultFileName(currentUrl)}_accept.csv")):
@@ -113,12 +112,14 @@ for field in urlDatabase.split('\n'):
                 notWorkingLog.close()
                 continue
 
+            resultLine = open("result/result.csv", "a")
+
             time.sleep(5)
             if os.path.exists("C:\selenium\Default\Cookies"):
                 try:
                     os.remove("C:\selenium\Default\Cookies")
                 except Exception as e:
-                    #message de notification via mail ou sms
+                    # message de notification via mail ou sms
                     raise e
             browser = webdriver.Chrome(executable_path=r'chromedriver.exe', options=options, )
             browser.delete_all_cookies()
@@ -161,6 +162,11 @@ for field in urlDatabase.split('\n'):
                            "safe",
                            "accept",
                            "wordpress-gdpr-popup-agree",
+                           "button_button--lgX0P",
+                           "cicb_fermer",
+                           "close-button",
+                           "gdpr-agreement",
+                           "cookiebanner-close",
                            ]
 
             idButton = ["footer_tc_privacy_button",
@@ -175,6 +181,8 @@ for field in urlDatabase.split('\n'):
                         "epdsubmit",
                         "cookie_action_close_header",
                         "cookieChoiceDismiss",
+                        "impliedsubmit",
+                        "cnilAccept",
                         ]
 
             xpathButton = ["//button[contains(text(),'ok')]",
@@ -190,9 +198,10 @@ for field in urlDatabase.split('\n'):
                            "//button[contains(text(),'Cookies')]",
                            "//button[contains(text(),'oui')]",
                            "//button[contains(text(),'Oui')]",
-                           "//a[contains(text(),'OK')]",
                            "//a[contains(text(),'accepter')]",
                            "//a[contains(text(),'Accepter')]",
+                           "//a[contains(text(),'accepte')]",
+                           "//a[contains(text(),'Accepte')]",
                            "//a[contains(text(),'Autoriser')]",
                            "//a[contains(text(),'autoriser')]",
                            "//a[contains(text(),'cookie')]",
