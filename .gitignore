@@ -4,4 +4,4 @@ geckodriver.exe
 scripttest.py
 result/*
 debug.log
-urlChecker.py
+test.py

@@ -8,8 +8,6 @@ import time
 
 from urlChecker import urlChecker
 
-import requests
-
 # Current directory
 currentDir = os.getcwd()
 
@@ -120,8 +118,7 @@ for field in urlDatabase.split('\n'):
                 try:
                     os.remove("C:\selenium\Default\Cookies")
                 except Exception as e:
-                    requests.get(f"https://smsapi.free-mobile.fr/sendmsg?user=95459826&pass=UbyUIMamz56vLp&msg=\"Error "
-                                 f"Something went wrong \"")
+                    #message de notification via mail ou sms
                     raise e
             browser = webdriver.Chrome(executable_path=r'chromedriver.exe', options=options, )
             browser.delete_all_cookies()
@@ -226,8 +223,6 @@ for field in urlDatabase.split('\n'):
             cookieNumberAfter, domainsAfter = collectCookie(currentUrl, 0, [], browserAccept, "accept")
 
             if isClicked:
-                requests.get(f"https://smsapi.free-mobile.fr/sendmsg?user=95459826&pass=UbyUIMamz56vLp&msg=\"Error "
-                             f"no click accepte {currentUrl} \"")
                 log = open("result/error.log", "a")
                 log.write(currentUrl + "\n")
                 log.close()
