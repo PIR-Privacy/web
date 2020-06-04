@@ -15,7 +15,7 @@ Start-Process powershell.exe -ArgumentList "-command `"Set-ExecutionPolicy Bypas
 
 
 Write-Output "Telechargement du driver de Google Chrome"
-(new-object System.Net.WebClient).DownloadFile('https://chromedriver.storage.googleapis.com/83.0.4103.39/chromedriver_win32.zip', $chromedriverDriverPathZip)
+(new-object System.Net.WebClient).DownloadFile('https://chromedriver.storage.googleapis.com/81.0.4044.138/chromedriver_win32.zip', $chromedriverDriverPathZip)
 Write-Output "Telechargement du driver de FireFox"
 (new-object System.Net.WebClient).DownloadFile('https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-win64.zip/', $firefoxDriverPathZip)
 
