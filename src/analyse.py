@@ -24,7 +24,7 @@ listAllDomainsBefore = []
 listAllDomainsAfter = []
 baseDomain = []
 
-file = open("result/result.csv", "r")
+file = open("../result/result.csv", "r")
 file.readline()
 
 if os.path.exists("result/analyseResult.txt"):

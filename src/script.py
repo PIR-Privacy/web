@@ -6,7 +6,7 @@ import sqlite3
 import os
 import time
 
-from urlChecker import urlChecker
+from src.urlChecker import urlChecker
 
 # Current directory
 currentDir = os.getcwd()
@@ -15,7 +15,7 @@ currentDir = os.getcwd()
 # https://www.data.gouv.fr/fr/datasets/liste-des-applications-et-des-versions-mobiles-des-sites-internet-publics/#_
 
 urlRegex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-urlDatabase = open("export-ITM_URL_2013-10-14.csv", "r", encoding="utf-8").read()
+urlDatabase = open("../export-ITM_URL_2013-10-14.csv", "r", encoding="utf-8").read()
 previousUrl = []
 
 # Options pour le navigateur
@@ -27,8 +27,8 @@ options.add_argument("--disable-cookie-encryption")
 options.add_argument(r"user-data-dir=C:\selenium")
 
 # Database avec analyse
-if not os.path.exists("result/result.csv"):
-    result = open("result/result.csv", "w")
+if not os.path.exists("../result/result.csv"):
+    result = open("../result/result.csv", "w")
     result.write("name, domainsBeforeAccept, numberBeforeAccept, numberAfterAccept, domainsAfterAccept\n")
     result.close()
 
@@ -74,7 +74,7 @@ def collectCookie(browsingUrl, cookiesCounter, cookiesList, brw, accept_noAccept
         cookieFile.write(f'{str(cookie["name"])}, {str(cookie["domain"])}, '
                          f'{"0" if (expiry is None or expiry == "None") else str(int(expiry) - dateTime)}, '
                          f'{str(cookie["path"])}, {str(cookie["httpOnly"])}, {str(cookie["secure"])}  \n')
-    brw.close()
+    brw.quit()
 
     # Connexion a la BDD de chrome pour récuperer les cookies
     con = sqlite3.connect(r'C:\selenium\Default\Cookies')
@@ -112,7 +112,7 @@ for field in urlDatabase.split('\n'):
                 notWorkingLog.close()
                 continue
 
-            resultLine = open("result/result.csv", "a")
+            resultLine = open("../result/result.csv", "a")
 
             time.sleep(5)
             if os.path.exists("C:\selenium\Default\Cookies"):
@@ -121,18 +121,18 @@ for field in urlDatabase.split('\n'):
                 except Exception as e:
                     # message de notification via mail ou sms
                     raise e
-            browser = webdriver.Chrome(executable_path=r'chromedriver.exe', options=options, )
+            browser = webdriver.Chrome(executable_path=r'../lib/chromedriver.exe', options=options, )
             browser.delete_all_cookies()
             browser.get(currentUrl)
             browser.implicitly_wait(5)
             if ("404" or "403") in browser.title:
-                browser.close()
+                browser.quit()
                 continue
 
             cookieNumberBefore, domainsBefore = collectCookie(currentUrl, 0, [], browser, "noAccept")
 
             # Generalisation du click sur accepter
-            browserAccept = webdriver.Chrome(executable_path=r'chromedriver.exe', options=options, )
+            browserAccept = webdriver.Chrome(executable_path=r'../lib/chromedriver.exe', options=options, )
             browserAccept.delete_all_cookies()
             browserAccept.get(currentUrl)
             browserAccept.implicitly_wait(5)
@@ -167,9 +167,13 @@ for field in urlDatabase.split('\n'):
                            "close-button",
                            "gdpr-agreement",
                            "cookiebanner-close",
+                           "Edf-cookie-acceptall",
+                           "cookiebar-disclaimer-btn"
+
                            ]
 
-            idButton = ["footer_tc_privacy_button",
+            idButton = ["cookie_action_close_header",
+                        "footer_tc_privacy_button",
                         "cb-enable",
                         "CBhide",
                         "tarteaucitronPersonalize",
@@ -183,6 +187,7 @@ for field in urlDatabase.split('\n'):
                         "cookieChoiceDismiss",
                         "impliedsubmit",
                         "cnilAccept",
+                        "cookieConsentConfirm",
                         ]
 
             xpathButton = ["//button[contains(text(),'ok')]",

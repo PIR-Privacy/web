@@ -1,7 +1,7 @@
 .idea
-chromedriver.exe
-geckodriver.exe
-scripttest.py
+lib/chromedriver.exe
+lib/geckodriver.exe
 result/*
+Test/*
 debug.log
-test.py
+__pycache__
