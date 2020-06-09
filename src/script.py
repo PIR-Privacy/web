@@ -7,6 +7,7 @@ import os
 import time
 
 from src.urlChecker import urlChecker
+from src.resultFilename import resultFileName
 
 # Current directory
 currentDir = os.getcwd()
@@ -54,12 +55,6 @@ def clickAccept(typeElem, liste, brw):
                 print("ERROR : ", exception, "\n")
 
 
-def resultFileName(URL):
-    currentUrlWhitoutHTTP = re.sub('(http://)|(https://)', '', URL)
-    currentUrlWhitoutHTTP = re.sub('(/)|(&)|(=)|(\?)', '_', currentUrlWhitoutHTTP)
-    return currentUrlWhitoutHTTP
-
-
 def collectCookie(browsingUrl, cookiesCounter, cookiesList, brw, accept_noAccept):
     # Cookie brut in txt file
     cookieFile = open("result/" + resultFileName(browsingUrl) + "_" + accept_noAccept + ".csv", "w")
@@ -100,14 +95,14 @@ for field in urlDatabase.split('\n'):
 
         if currentUrl not in previousUrl:
 
-            if (os.path.exists(f"result/{resultFileName(currentUrl)}_noAccept.csv")
-                    and os.path.exists(f"result/{resultFileName(currentUrl)}_accept.csv")):
+            if (os.path.exists(f"../result/{resultFileName(currentUrl)}_noAccept.csv")
+                    and os.path.exists(f"../result/{resultFileName(currentUrl)}_accept.csv")):
                 print(currentUrl + " : aborted, report exist")
                 continue
 
             print("Work in progress :" + currentUrl)
             if not urlChecker(currentUrl):
-                notWorkingLog = open("result/urlNotWorking.log", "a")
+                notWorkingLog = open("../result/urlNotWorking.log", "a")
                 notWorkingLog.write(currentUrl + "\n")
                 notWorkingLog.close()
                 continue
@@ -238,7 +233,7 @@ for field in urlDatabase.split('\n'):
             cookieNumberAfter, domainsAfter = collectCookie(currentUrl, 0, [], browserAccept, "accept")
 
             if isClicked:
-                log = open("result/error.log", "a")
+                log = open("../result/error.log", "a")
                 log.write(currentUrl + "\n")
                 log.close()
 

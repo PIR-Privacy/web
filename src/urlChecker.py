@@ -10,6 +10,9 @@ def urlChecker(URL):
     except requests.exceptions.ConnectionError as e:
         print(URL + " not resolved")
         return False
+    except requests.exceptions.TooManyRedirects as e:
+        print(URL + " too many redirects")
+        return False
     print(URL + " ok")
     return True
 

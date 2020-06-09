@@ -3,6 +3,10 @@ import os
 import shutil
 import datetime
 
+import src
+from src import printAndWrite
+
+
 def listeRefactor(chaine):
     liste = []
     for elem in chaine:
@@ -27,10 +31,9 @@ baseDomain = []
 file = open("../result/result.csv", "r")
 file.readline()
 
-if os.path.exists("result/analyseResult.txt"):
-    shutil.copyfile("result/analyseResult.txt",
-                    f"result/{datetime.datetime.now().strftime('%d_%m_%Y_%H_%M_%S')}analyseResult.txt")
-    os.remove("result/analyseResult.txt")
+if os.path.exists("../result/analyseResult.txt"):
+    shutil.copyfile("../result/analyseResult.txt",
+                    f"../result/{datetime.datetime.now().strftime('%d_%m_%Y_%H_%M_%S')}analyseResult.txt")
 
 for line in file.readlines():
     field = line.split("[")
@@ -47,22 +50,25 @@ for line in file.readlines():
 
 file.close()
 
-
-def printAndWrite(txt):
-    analyseResult = open("result/analyseResult.txt", "a")
-    print(str(txt))
-    analyseResult.write(str(txt) + "\n")
-
-
 resultList = sorted(resultList, reverse=True, key=lambda e: e[2])
-printAndWrite("---------Top 10 nombre de cookies avant accepter ------------")
-for i in range(0, 10):
-    printAndWrite(resultList[i][0])
+src.printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                "---------Top 10 nombre de cookies avant accepter ------------")
+try:
+    for i in range(0, 10):
+        src.printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                        resultList[i][0])
+except IndexError:
+    pass
 
 resultList = sorted(resultList, reverse=True, key=lambda e: e[4])
-printAndWrite("---------Top 10 nombre de cookies apres accepter ------------")
-for i in range(0, 10):
-    printAndWrite(resultList[i][0])
+src.printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                "---------Top 10 nombre de cookies apres accepter ------------")
+try:
+    for i in range(0, 10):
+        src.printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                        resultList[i][0])
+except IndexError:
+    pass
 
 topDomainBefore = {}
 topDomainAfter = {}
@@ -76,20 +82,25 @@ topDomainAfter = {k: v for k, v in sorted(topDomainAfter.items(), reverse=True, 
 
 top10ExternDomainBefore = "---------Top 10 domain avant accepter ------------ \n"
 top10ExternDomainAfter = "---------Top 10 domain apres accepter ------------ \n"
-for i in range(0, 10):
-    top10ExternDomainBefore += list(topDomainBefore)[i] \
-                               + " : " \
-                               + str(topDomainBefore[list(topDomainBefore)[i]]) \
-                               + "/" \
-                               + str(len(resultList)) \
-                               + "\n"
+try:
+    for i in range(0, 10):
+        top10ExternDomainBefore += list(topDomainBefore)[i] \
+                                   + " : " \
+                                   + str(topDomainBefore[list(topDomainBefore)[i]]) \
+                                   + "/" \
+                                   + str(len(resultList)) \
+                                   + "\n"
 
-    top10ExternDomainAfter += list(topDomainAfter)[i] \
-                              + " : " \
-                              + str(topDomainAfter[list(topDomainAfter)[i]]) \
-                              + "/" \
-                              + str(len(resultList)) \
-                              + "\n"
+        top10ExternDomainAfter += list(topDomainAfter)[i] \
+                                  + " : " \
+                                  + str(topDomainAfter[list(topDomainAfter)[i]]) \
+                                  + "/" \
+                                  + str(len(resultList)) \
+                                  + "\n"
+except IndexError:
+    pass
 
-printAndWrite(top10ExternDomainBefore)
-printAndWrite(top10ExternDomainAfter)
+src.printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                top10ExternDomainBefore)
+src.printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                top10ExternDomainAfter)
