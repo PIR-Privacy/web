@@ -3,9 +3,7 @@ import shutil
 import datetime
 import re
 
-import src
-from src import printAndWrite
-
+import printAndWrite
 
 if os.path.exists("../result/analyseResult.txt"):
     shutil.copyfile("../result/analyseResult.txt",
@@ -14,7 +12,6 @@ if os.path.exists("../result/analyseResult.txt"):
     analyseResult.close()
 
 resultList = []
-
 
 with open("../result/result.csv", "r") as resultFile:
     resultFile.readline()
@@ -31,35 +28,34 @@ with open("../result/result.csv", "r") as resultFile:
                            [re.sub(regexClearDomain, "", domain) for domain in field[6].split(",")],
                            ])
 
-
 resultList = sorted(resultList, reverse=True, key=lambda e: e[1])
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                "---------Top 10 First-party cookies number ------------")
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            "---------Top 10 First-party cookies number ------------")
 try:
     for i in range(0, 10):
-        src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                        resultList[i][0])
+        printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                    resultList[i][0])
 except IndexError:
     pass
 print(resultList)
 
 resultList = sorted(resultList, reverse=True, key=lambda e: e[3])
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                "---------Top 10 Third-party cookies number ------------")
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            "---------Top 10 Third-party cookies number ------------")
 try:
     for i in range(0, 10):
-        src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                        resultList[i][0])
+        printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                    resultList[i][0])
 except IndexError:
     pass
 
 resultList = sorted(resultList, reverse=True, key=lambda e: e[5])
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                "---------Top 10 Third-party requests number ------------")
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            "---------Top 10 Third-party requests number ------------")
 try:
     for i in range(0, 10):
-        src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                        resultList[i][0])
+        printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                    resultList[i][0])
 except IndexError:
     pass
 
@@ -97,32 +93,31 @@ top10ThirdPartyRequests = "---------Top 10 Third-party requests domain ---------
 try:
     for i in range(0, 10):
         top10FirstPartyCookie += list(topFirstPartyCookieDomain)[i] \
-                                   + " : " \
-                                   + str(topFirstPartyCookieDomain[list(topFirstPartyCookieDomain)[i]]) \
-                                   + "/" \
-                                   + str(len(resultList)) \
-                                   + "\n"
-
-        top10ThirdPartyCookie += list(topThirdPartyCookieDomain)[i] \
-                                  + " : " \
-                                  + str(topThirdPartyCookieDomain[list(topThirdPartyCookieDomain)[i]]) \
-                                  + "/" \
-                                  + str(len(resultList)) \
-                                  + "\n"
-
-        top10ThirdPartyRequests += list(topThirdPartyRequestsDomain)[i] \
                                  + " : " \
-                                 + str(topThirdPartyRequestsDomain[list(topThirdPartyRequestsDomain)[i]]) \
+                                 + str(topFirstPartyCookieDomain[list(topFirstPartyCookieDomain)[i]]) \
                                  + "/" \
                                  + str(len(resultList)) \
                                  + "\n"
+
+        top10ThirdPartyCookie += list(topThirdPartyCookieDomain)[i] \
+                                 + " : " \
+                                 + str(topThirdPartyCookieDomain[list(topThirdPartyCookieDomain)[i]]) \
+                                 + "/" \
+                                 + str(len(resultList)) \
+                                 + "\n"
+
+        top10ThirdPartyRequests += list(topThirdPartyRequestsDomain)[i] \
+                                   + " : " \
+                                   + str(topThirdPartyRequestsDomain[list(topThirdPartyRequestsDomain)[i]]) \
+                                   + "/" \
+                                   + str(len(resultList)) \
+                                   + "\n"
 except IndexError:
     pass
 
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                top10FirstPartyCookie)
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                top10ThirdPartyCookie)
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                top10ThirdPartyRequests)
-
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            top10FirstPartyCookie)
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            top10ThirdPartyCookie)
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            top10ThirdPartyRequests)

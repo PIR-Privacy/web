@@ -3,21 +3,20 @@ import os
 import shutil
 import datetime
 
-import src
-from src import printAndWrite
+import printAndWrite
 
 
 def listeRefactor(chaine):
     liste = []
+    number = None
     for elem in chaine:
         try:
-            int(elem)
+            number = int(elem)
         except ValueError:
             newelem = re.sub(r"(\')|(\])|( )", "", elem)
             if newelem != "":
                 liste.append(newelem)
-        else:
-            number = int(elem)
+
     return liste, number
 
 
@@ -51,22 +50,22 @@ for line in file.readlines():
 file.close()
 
 resultList = sorted(resultList, reverse=True, key=lambda e: e[2])
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                "---------Top 10 nombre de cookies avant accepter ------------")
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            "---------Top 10 nombre de cookies avant accepter ------------")
 try:
     for i in range(0, 10):
-        src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                        resultList[i][0])
+        printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                    resultList[i][0])
 except IndexError:
     pass
 
 resultList = sorted(resultList, reverse=True, key=lambda e: e[4])
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                "---------Top 10 nombre de cookies apres accepter ------------")
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            "---------Top 10 nombre de cookies apres accepter ------------")
 try:
     for i in range(0, 10):
-        src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                        resultList[i][0])
+        printAndWrite.printAndWrite("../result/analyseResult.txt",
+                                    resultList[i][0])
 except IndexError:
     pass
 
@@ -100,7 +99,7 @@ try:
 except IndexError:
     pass
 
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                top10ExternDomainBefore)
-src.printAndWrite.printAndWrite("../result/analyseResult.txt",
-                                top10ExternDomainAfter)
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            top10ExternDomainBefore)
+printAndWrite.printAndWrite("../result/analyseResult.txt",
+                            top10ExternDomainAfter)

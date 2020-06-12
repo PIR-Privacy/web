@@ -7,11 +7,14 @@ def urlChecker(URL):
         if page.status_code in [404, 403]:
             print(URL + " error " + str(page.status_code))
             return False
-    except requests.exceptions.ConnectionError as e:
+    except requests.exceptions.ConnectionError:
         print(URL + " not resolved")
         return False
-    except requests.exceptions.TooManyRedirects as e:
+    except requests.exceptions.TooManyRedirects:
         print(URL + " too many redirects")
+        return False
+    except UnicodeError:
+        print(URL + " encoding problem")
         return False
     print(URL + " ok")
     return True

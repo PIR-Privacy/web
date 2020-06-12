@@ -1,40 +1,44 @@
-import selenium
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-
-import src
-from src import verifFile, resultFilename, urlChecker
-
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-
 import os
 import re
 
+import resultFilename
+import urlChecker
+import verifFile
+
+import selenium
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+
 webprivacycheckURL = "https://webprivacycheck.plehn-media.de/en"
-urlRegex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+
+urlRegex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)" \
+           r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+" \
+           r"|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+
 urlDatabase = open("../export-ITM_URL_2013-10-14.csv", "r", encoding="utf-8").read()
 previousUrl = []
 
 options = Options()
 options.add_argument(r"user-data-dir=C:\selenium")
 
-src.verifFile.verif("../result/result.csv",
-                    "name;"
-                    "First-party cookies number; "
-                    "First-party cookies domains; "
-                    "Third-party cookies number; "
-                    "Third-party cookies domains; "
-                    "Third-party requests number; "
-                    "Third-party requests domains \n")
+verifFile.verif("../result/result.csv",
+                "name;"
+                "First-party cookies number; "
+                "First-party cookies domains; "
+                "Third-party cookies number; "
+                "Third-party cookies domains; "
+                "Third-party requests number; "
+                "Third-party requests domains \n")
 
-src.verifFile.verif("../result/urlNotWorking.log",
-                    "Url with 404 or 403 error \n")
+verifFile.verif("../result/urlNotWorking.log",
+                "Url with 404 or 403 error \n")
 
-src.verifFile.verif("../result/error.log",
-                    "url dont il y a eu un probleme avec l'analyse \n")
+verifFile.verif("../result/error.log",
+                "url dont il y a eu un probleme avec l'analyse \n")
 
 browser = webdriver.Chrome(executable_path=r'../lib/chromedriver.exe', options=options, )
 browser.get(webprivacycheckURL)
@@ -44,12 +48,12 @@ for field in urlDatabase.split('\n'):
     for url in re.findall(urlRegex, field):
         currentURL = url[0]
         if currentURL not in previousUrl:
-            if os.path.exists(f"../result/{src.resultFilename.resultFileName(currentURL)}.csv"):
+            if os.path.exists(f"../result/{resultFilename.resultFileName(currentURL)}.csv"):
                 print("Aborted, report exist for : " + currentURL)
                 continue
             else:
                 print("Work in progress : " + currentURL)
-                if not src.urlChecker.urlChecker(currentURL):
+                if not urlChecker.urlChecker(currentURL):
                     with open("../result/urlNotWorking.log", "a") as notWorkingLog:
                         notWorkingLog.write(currentURL + "\n")
                         continue
@@ -74,7 +78,7 @@ for field in urlDatabase.split('\n'):
                         thirdpartyCookieList = []
                         thirdpartyRequestsList = []
 
-                        with open(f"../result/{src.resultFilename.resultFileName(currentURL)}.csv",
+                        with open(f"../result/{resultFilename.resultFileName(currentURL)}.csv",
                                   "w") as currentResult:
                             currentResult.write("Domain, Name, Expires on \n")
                             data = browser.find_elements_by_class_name("cookies")

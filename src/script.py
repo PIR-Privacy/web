@@ -6,8 +6,8 @@ import sqlite3
 import os
 import time
 
-from src.urlChecker import urlChecker
-from src.resultFilename import resultFileName
+import urlChecker
+import resultFilename
 
 # Current directory
 currentDir = os.getcwd()
@@ -15,7 +15,10 @@ currentDir = os.getcwd()
 # Variable pour le traitement de la database de data.gouv.fr
 # https://www.data.gouv.fr/fr/datasets/liste-des-applications-et-des-versions-mobiles-des-sites-internet-publics/#_
 
-urlRegex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+urlRegex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)" \
+           r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+" \
+           r"|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+
 urlDatabase = open("../export-ITM_URL_2013-10-14.csv", "r", encoding="utf-8").read()
 previousUrl = []
 
@@ -38,6 +41,7 @@ isClicked = True
 
 def clickAccept(typeElem, liste, brw):
     global isClicked
+    cookieAccept = None
     if isClicked:
         for name in liste:
             try:
@@ -57,7 +61,7 @@ def clickAccept(typeElem, liste, brw):
 
 def collectCookie(browsingUrl, cookiesCounter, cookiesList, brw, accept_noAccept):
     # Cookie brut in txt file
-    cookieFile = open("result/" + resultFileName(browsingUrl) + "_" + accept_noAccept + ".csv", "w")
+    cookieFile = open("result/" + resultFilename.resultFileName(browsingUrl) + "_" + accept_noAccept + ".csv", "w")
     cookieFile.write("name, domain, expiry, path, httpOnly, secure \n")
     dateTime = int(time.time())
 
@@ -95,13 +99,13 @@ for field in urlDatabase.split('\n'):
 
         if currentUrl not in previousUrl:
 
-            if (os.path.exists(f"../result/{resultFileName(currentUrl)}_noAccept.csv")
-                    and os.path.exists(f"../result/{resultFileName(currentUrl)}_accept.csv")):
+            if (os.path.exists(f"../result/{resultFilename.resultFileName(currentUrl)}_noAccept.csv")
+                    and os.path.exists(f"../result/{resultFilename.resultFileName(currentUrl)}_accept.csv")):
                 print(currentUrl + " : aborted, report exist")
                 continue
 
             print("Work in progress :" + currentUrl)
-            if not urlChecker(currentUrl):
+            if not urlChecker.urlChecker(currentUrl):
                 notWorkingLog = open("../result/urlNotWorking.log", "a")
                 notWorkingLog.write(currentUrl + "\n")
                 notWorkingLog.close()
@@ -110,9 +114,9 @@ for field in urlDatabase.split('\n'):
             resultLine = open("../result/result.csv", "a")
 
             time.sleep(5)
-            if os.path.exists("C:\selenium\Default\Cookies"):
+            if os.path.exists(r"C:\selenium\Default\Cookies"):
                 try:
-                    os.remove("C:\selenium\Default\Cookies")
+                    os.remove(r"C:\selenium\Default\Cookies")
                 except Exception as e:
                     # message de notification via mail ou sms
                     raise e
